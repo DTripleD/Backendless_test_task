@@ -32,8 +32,9 @@ function App() {
       <Routes>
         <Route path="/" element={<SharedLayout />}>
           {tabs.map((tab) => {
+            console.log(tab.path);
             const Table = lazy(() => {
-              return import(`./${tab.path}`);
+              return import(`./tabs/${tab.path}.jsx`);
             });
             return <Route key={tab.id} path={tab.id} element={<Table />} />;
           })}
