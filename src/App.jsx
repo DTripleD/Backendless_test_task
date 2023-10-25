@@ -1,12 +1,16 @@
 import { lazy, useState } from "react";
 import "./App.css";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { SharedLayout } from "./components/SharedLayout";
 
 function App() {
   const [loading, setLoading] = useState(false);
   const [tabs, setTabs] = useState([]);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const current = location.pathname.replace("/Backendless-test-task/", "");
 
   useEffect(() => {
     fetch(
@@ -19,14 +23,15 @@ function App() {
       .then((data) => {
         const sortedData = data.sort((a, b) => a.order - b.order);
         setTabs(sortedData);
-
-        // setDataLoaded(true);
+        if (!current) {
+          navigate("/Backendless-test-task/dummyList");
+        }
       })
       .catch((error) => {
         console.error(error);
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [current, navigate]);
 
   return loading ? (
     <div>Loading...</div>
@@ -34,11 +39,10 @@ function App() {
     <Routes>
       <Route path="/" element={<SharedLayout data={tabs} />}>
         {tabs.map((tab) => {
-          const path = tab.order === 0 ? tab.id : tab.id;
           const Element = lazy(() => {
             return import(`./tabs/${tab.path}.jsx`);
           });
-          return <Route key={tab.id} path={path} element={<Element />} />;
+          return <Route key={tab.id} path={tab.id} element={<Element />} />;
         })}
       </Route>
     </Routes>
