@@ -3,10 +3,7 @@ import "./App.css";
 
 import { Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
-
-const DummyChart = lazy(() => import("./pages/dummyChart"));
-const DummyList = lazy(() => import("./pages/dummyList"));
-const DummyTable = lazy(() => import("./pages/dummyTable"));
+import { SharedLayout } from "./components/SharedLayout";
 
 function App() {
   const [tabs, setTabs] = useState([]);
@@ -33,9 +30,14 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<DummyChart />} />
-        <Route path="/list" element={<DummyList />} />
-        <Route path="/table" element={<DummyTable />} />
+        <Route path="/" element={<SharedLayout />}>
+          {tabs.map((tab) => {
+            const Table = lazy(() => {
+              return import(`./pages/${tab.path}`);
+            });
+            return <Route key={tab.id} path={tab.id} element={<Table />} />;
+          })}
+        </Route>
       </Routes>
     </>
   );
