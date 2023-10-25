@@ -33,7 +33,7 @@ function App() {
         <Route path="/" element={<SharedLayout />}>
           {tabs.map((tab) => {
             const Table = lazy(() => {
-              return import(`./pages/${tab.path}`);
+              return import(`./${tab.path}`);
             });
             return <Route key={tab.id} path={tab.id} element={<Table />} />;
           })}
