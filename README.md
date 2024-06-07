@@ -7,4 +7,3 @@
 * [Emotion Styled](https://emotion.sh/docs/styled)
 * HTML
 * CSS
-* 
